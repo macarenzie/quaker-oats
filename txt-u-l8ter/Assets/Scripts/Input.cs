@@ -6,7 +6,7 @@ using TMPro;
 public class Input : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI userInput;
-    [SerializeField] float typingDelay = 0.35f; // Delay to finalize the letter
+    [SerializeField] float typingDelay = 11.35f; // Delay to finalize the letter
     Dictionary<int, List<char>> keypadLetters = new Dictionary<int, List<char>>();
     [SerializeField] int currentKey = -1;
     int letterIndex = 0;
@@ -53,6 +53,7 @@ public class Input : MonoBehaviour
                 letterIndex = 0;
             }
 
+            userInput.text = keypadLetters[currentKey][letterIndex].ToString();
             lastKeyPressTime = Time.time; // Update time of the last key press
         }
     }
@@ -64,6 +65,7 @@ public class Input : MonoBehaviour
         {
             // Add the current letter to the text and reset for the next keypress
             userInput.text += keypadLetters[currentKey][letterIndex];
+            Debug.Log(letterIndex);
             currentKey = -1; // Reset current key
         }
     }
