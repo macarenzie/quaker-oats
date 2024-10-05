@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// Script: Input
+/// Purpose: Handles the button input from the user
+/// Author(s): Vaibhavy Darshan, McKenzie Lam
+/// </summary>
 public class Input : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI userInput;
@@ -53,6 +58,7 @@ public class Input : MonoBehaviour
                 letterIndex = 0;
             }
 
+            // display the current letter being cycled through
             userInput.text = keypadLetters[currentKey][letterIndex].ToString();
             lastKeyPressTime = Time.time; // Update time of the last key press
         }
@@ -65,7 +71,6 @@ public class Input : MonoBehaviour
         {
             // Add the current letter to the text and reset for the next keypress
             userInput.text += keypadLetters[currentKey][letterIndex];
-            Debug.Log(letterIndex);
             currentKey = -1; // Reset current key
         }
     }
