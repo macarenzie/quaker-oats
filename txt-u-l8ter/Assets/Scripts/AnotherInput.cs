@@ -8,6 +8,7 @@ using UnityEngine;
 /// Script: Input
 /// Purpose: Handles the button input from the user
 /// Author(s): Vaibhavy Darshan, McKenzie Lam
+/// Bugs: Space does not work at times
 /// </summary>
 public class AnotherInput : MonoBehaviour
 {
@@ -85,6 +86,8 @@ public class AnotherInput : MonoBehaviour
         }
 
         userInputField.text += currentLetter; // Display the current letter
+
+        //Debug.Log(userInputField.text);
     }
 
     // Append the finalized letter to the input field
