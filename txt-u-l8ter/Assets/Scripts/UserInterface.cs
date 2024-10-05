@@ -32,12 +32,12 @@ public class UserInterface : MonoBehaviour
 
     public void ShowResults(float timeTaken, float accuracy)
     {
-        resultDisplay.text = $"Time: {timeTaken:F2} seconds\nAccuracy: {accuracy:P2}";
+       // resultDisplay.text = $"Time: {timeTaken:F2} seconds\nAccuracy: {accuracy:P2}";
     }
 
     public void ResetUI()
     {
         phraseDisplay.text = "";
-        resultDisplay.text = "";
+       // resultDisplay.text = "";
     }
 }
