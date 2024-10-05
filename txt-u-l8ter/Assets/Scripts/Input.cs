@@ -11,18 +11,17 @@ using TMPro;
 public class Input : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI userInput;
-    [SerializeField] float typingDelay = 11.35f; // Delay to finalize the letter
+    [SerializeField] float typingDelay = 1.35f; // Delay to finalize the letter
     Dictionary<int, List<char>> keypadLetters = new Dictionary<int, List<char>>();
     [SerializeField] int currentKey = -1;
-    int letterIndex = 0;
+    int letterIndex = -1;
     float lastKeyPressTime;
 
     // Start is called before the first frame update
     void Start()
     {
         // Initialize the keypad dictionary (e.g., '2' corresponds to 'a', 'b', 'c')
-        //keypadLetters[0] = new List<char> {' '};
-        //keypadLetters[1] = new List<char> { };
+        keypadLetters[0] = new List<char> { ' ' };
         keypadLetters[2] = new List<char> { 'a', 'b', 'c' };
         keypadLetters[3] = new List<char> { 'd', 'e', 'f' };
         keypadLetters[4] = new List<char> { 'g', 'h', 'i' };
@@ -36,38 +35,44 @@ public class Input : MonoBehaviour
     // Function to handle keypresses
     public void OnKeyPress(int key)
     {
+        string inputString = null;
         if (keypadLetters.ContainsKey(key))
         {
             float timeSinceLastPress = Time.time - lastKeyPressTime;
 
-            // If the same key is pressed within the delay window, cycle through letters
-            if (key == currentKey && timeSinceLastPress < typingDelay)
+            while(timeSinceLastPress > typingDelay)
             {
-                letterIndex = (letterIndex + 1) % keypadLetters[key].Count; // Cycle through letters
-            }
-            else
-            {
-                // If it's a different key or time delay has passed, finalize the previous letter
-                if (currentKey != -1 && timeSinceLastPress < typingDelay)
+                // If the same key is pressed within the delay window, cycle through letters
+                if (key == currentKey && timeSinceLastPress < typingDelay)
                 {
-                    userInput.text += keypadLetters[currentKey][letterIndex]; // Add finalized letter
+                    letterIndex = (letterIndex + 1) % keypadLetters[key].Count; // Cycle through letters
+                }
+                else
+                {
+                    // Finalize the previous letter if delay has not passed
+                    if (currentKey != -1 && timeSinceLastPress < typingDelay && letterIndex != -1)
+                    {
+                        inputString += keypadLetters[currentKey][letterIndex].ToString(); // Add finalized letter to input
+                    }
+
+                    // Start typing the new letter
+                    currentKey = key;
+                    letterIndex = 0; // Reset to the first letter of the new key
                 }
 
-                // Start typing the new letter
-                currentKey = key;
-                letterIndex = 0;
+                // Display the currently selected letter from the key being cycled through
+                inputString = userInput.text.Substring(0, userInput.text.Length - 1) + keypadLetters[currentKey][letterIndex].ToString();
+                lastKeyPressTime = Time.time; // Update time of the last key press
             }
 
-            // display the current letter being cycled through
-            userInput.text = keypadLetters[currentKey][letterIndex].ToString();
-            lastKeyPressTime = Time.time; // Update time of the last key press
+            Debug.Log(inputString);
         }
     }
 
     // Function to finalize the current letter if delay has passed
     void Update()
     {
-        if (currentKey != -1 && Time.time - lastKeyPressTime >= typingDelay)
+        if (currentKey != -1 && Time.time - lastKeyPressTime >= typingDelay && letterIndex != -1)
         {
             // Add the current letter to the text and reset for the next keypress
             userInput.text += keypadLetters[currentKey][letterIndex];
