@@ -19,6 +19,14 @@ public class Phrase : MonoBehaviour
     private int phraseIndex;
     #endregion
 
+    #region PROPERTIES
+    protected int Count
+    {
+        get { return phraseList.Count; }
+    }
+
+    #endregion
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +35,7 @@ public class Phrase : MonoBehaviour
 
         if (displayText != null)
         {
-            displayText.text = phraseList[phraseIndex];
+            displayText.text = phraseList[phraseIndex] + "\nList count = " + phraseList.Count;
         }
     }
 
