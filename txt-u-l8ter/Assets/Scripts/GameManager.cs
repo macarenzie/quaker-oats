@@ -13,58 +13,68 @@ public class GameManager : MonoBehaviour
     private TextMeshPro accuracyScore;
 
     [SerializeField] private Timer timer;
-    private Input userInput;
+    private InputDummy userInput;
 
     private int wordIndex;
 
     private bool gameOver;
 
-    //starts game
-    //connects to start call button 
-    private void StartGame()
+    private void Start()
     {
-        gameOver = false;
-        timer.IsRunning = true;
-        wordIndex = 0;
-        wordPrompt.text = phrases.List[wordIndex];
+        wordPrompt.text = "Press Start to begin!";
+        timer.IsRunning = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        while (!gameOver)
+        if (!gameOver)
         {
-            if (timer.TimeRemaining == 0)
+            if (timer.TimeRemaining <= 0)
             {
                 EndGame();
             }
-
-            //save the initial word displayed after button press
-            PressOkay();
-
-            //move on to the next phrase
-            NextPhrase();
         }
+    }
+
+    //starts game
+    //connects to start call button 
+    public void StartGame()
+    {
+        wordIndex = 0;
+        answers.Clear();
+        gameOver = false;
+        timer.IsRunning = true;
+        wordPrompt.text = phrases.List[wordIndex];
+        Debug.Log("Game started");
     }
 
     //ends gmae
     //connects to end call button
-    private void EndGame()
+    public void EndGame()
     {
         gameOver = true;
         timer.IsRunning = false;
-
-        if (timer.TimeRemaining == 0)
-        {
-            ShowResults();
-        }
+        Debug.Log("Game started");
     }
 
     private void NextPhrase()
     {
+        //save the initial word displayed after button press
+        PressOkay();
+
         //updates the word index and displays the next word
         wordIndex++;
-        wordPrompt.text = phrases.List[wordIndex];
+
+        if (wordIndex < phrases.List.Count)
+        {
+            wordPrompt.text = phrases.List[wordIndex];
+        }
+        else
+        {
+            EndGame();
+        }
+
         Debug.Log("moved onto next phrase");
     }
 
@@ -79,50 +89,32 @@ public class GameManager : MonoBehaviour
     private string CalculateAccuracy()
     {
         int accurateLetters = 0;
-        int accuracyScore = 0;
-        int totalChars = 0;
+        int totalLetters = 0;
 
-        //calculate the total amount of chars in the answers array
-        foreach (string word in answers)
+        for (int i = 0; i < answers.Count && i < phrases.List.Count; i++)
         {
-            for (int i = 0; i < word.Length; i++)
-            {
-                totalChars++;
-            }
-        }    
+            string answer = answers[i];
+            string phrase = phrases.List[i];
 
-        //grab the answers in the answers list
-        foreach (string answer in answers)
-        {
-            //and int the phrases list
-            foreach (string word in phrases.List)
+            totalLetters += Mathf.Max(answer.Length, phrase.Length);
+
+            for (int j = 0; j < Mathf.Min(answer.Length, phrase.Length); j++)
             {
-                //itterate through each word's char for both arrays
-                for (int i = 0; i < answer.Length; i++)
+                if (answer[j] == phrase[j])
                 {
-                    for (int j = 0; j < word.Length; j++)
-                    {
-                        //compare chars and add to the counter if correct
-                        if (answer[i] == word[i])
-                        {
-                            accurateLetters++;
-                        }
-                    }
+                    accurateLetters++;
                 }
             }
         }
 
-        //calculate percentage
-        accuracyScore = accurateLetters / totalChars;
-
-        //returnn string
-        return accuracyScore.ToString();
+        float accuracy = (float)accurateLetters / totalLetters * 100f;
+        return accuracy.ToString("F2") + "%";
     }
 
     //attaching this to Okay button
     public void PressOkay()
     {
-        answers[wordIndex] = userInput.Text;
+        answers[wordIndex] = userInput.FinalizedText;
         Debug.Log("user input saved into answers!");
     }
 }

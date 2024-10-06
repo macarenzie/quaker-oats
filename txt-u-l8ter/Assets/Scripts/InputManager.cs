@@ -25,9 +25,10 @@ public class InputManager : MonoBehaviour
             {
                 userInputField.text = "";   //Empties it out to make sure that letters from all the buttons are added
                 finalizedString += inputDummies[i].LastLetter; // Finalize the current letter
-                userInputField.text = finalizedString; // Update the user input field
                 inputDummies[i].IsClicked = false;
             }
         }
+
+        userInputField.text = finalizedString; // Update the user input field
     }
 }
