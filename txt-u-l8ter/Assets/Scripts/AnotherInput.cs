@@ -4,22 +4,26 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+
 /// <summary>
 /// Script: Input
 /// Purpose: Handles the button input from the user
-/// Author(s): Vaibhavy Darshan, McKenzie Lam
+/// Author(s): Vaibhavy Darshan, McKenzie Lam, Lisa Pham
 /// Bugs: Space does not work at times
 /// </summary>
 public class AnotherInput : MonoBehaviour
 {
     [SerializeField] TMP_InputField userInputField; // Changed to TMP_InputField
     [SerializeField] float typingDelay = 1.35f; // Delay to finalize the letter
+    [SerializeField] float caretBlinkInterval = 0.5f;
     Dictionary<int, List<char>> keypadLetters = new Dictionary<int, List<char>>();
     [SerializeField] int currentKey = -1;
     int letterIndex = -1;
     float lastKeyPressTime;
-    string finalizedString = null;
-    
+    bool caretVisible = true;
+    Coroutine caretBlinkCoroutine;
+    string finalText = "";
+
     void Start()
     {
         // Initialize the keypad dictionary
@@ -32,6 +36,8 @@ public class AnotherInput : MonoBehaviour
         keypadLetters[7] = new List<char> { 'p', 'q', 'r', 's' };
         keypadLetters[8] = new List<char> { 't', 'u', 'v' };
         keypadLetters[9] = new List<char> { 'w', 'x', 'y', 'z' };
+
+        caretBlinkCoroutine = StartCoroutine(BlinkCaret());
     }
 
     // Function to handle keypresses
@@ -78,6 +84,26 @@ public class AnotherInput : MonoBehaviour
         }
     }
 
+    //Display the currently selected letter with a blinking caret
+    void DisplayCurrentLetterWithCaret(char currentLetter)
+    {
+        // Remove the blinking caret if it exists
+        if (userInputField.text.EndsWith("|"))
+        {
+            userInputField.text = userInputField.text.Substring(0, userInputField.text.Length - 1);
+        }
+
+        // Remove the last character and add the current letter with the blinking caret
+        if (finalText.Length > 0 && letterIndex != -1)
+        {
+            userInputField.text = finalText + currentLetter + (caretVisible ? "|" : "");
+        }
+        else
+        {
+            userInputField.text = currentLetter.ToString() + (caretVisible ? "|" : "");
+        }
+    }
+
     // Display the currently selected letter (replaces the last character)
     void DisplayCurrentLetter(char currentLetter)
     {
@@ -94,7 +120,22 @@ public class AnotherInput : MonoBehaviour
     // Append the finalized letter to the input field
     void AppendLetterToInput(char letter)
     {
-        userInputField.text += letter; // Append the letter to the input field
-        Debug.Log(userInputField.text);
+        finalText += letter;
+        //userInputField.text += letter; // Append the letter to the input field
+    }
+
+    IEnumerator BlinkCaret()
+    {
+        while (true)  // Infinite loop for continuous blinking
+        {
+            caretVisible = !caretVisible; // Toggle caret visibility on and off
+            yield return new WaitForSeconds(caretBlinkInterval); // Wait for the specified interval
+
+            // Refresh the displayed text to show/hide caret
+            if (currentKey != -1 && letterIndex != -1)
+            {
+                DisplayCurrentLetterWithCaret(keypadLetters[currentKey][letterIndex]);
+            }
+        }
     }
 }
