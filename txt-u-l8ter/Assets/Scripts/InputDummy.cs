@@ -70,6 +70,8 @@ public class InputDummy : MonoBehaviour
     {
         //prevLetters = userInputField.text;
         prevLetters = manager.FinalizedString;
+        
+        // if the button is initialized in the dictionary
         if (keypadLetters.ContainsKey(key))
         {
             //Debug.Log(prevLetters);
@@ -92,10 +94,14 @@ public class InputDummy : MonoBehaviour
                 // Finalize the previous letter if delay has not passed
                 if (currentKey != -1 && timeSinceLastPress < typingDelay && letterIndex != -1)
                 {
+                    /* VAIBHAVY'S CODE - COMMENTING OUT TO TRY SOMETHING (kenz)
                     outputText = keypadLetters[currentKey][letterIndex].ToString(); // Finalize the last letter
                     //Debug.Log(finalizedText);
                     outputText =  userInputField.text.ToString(); // Update the finalized input text
                     isTyping = false;
+                    */
+
+                    outputText += keypadLetters[currentKey][letterIndex];
                 }
 
                 // Start typing the new letter
@@ -116,7 +122,12 @@ public class InputDummy : MonoBehaviour
         if (currentKey != -1 && Time.time - lastKeyPressTime >= typingDelay && letterIndex != -1)
         {
             // Finalize the letter and reset for the next keypress
-            outputText = keypadLetters[currentKey][letterIndex].ToString();
+
+            // outputText = keypadLetters[currentKey][letterIndex].ToString();
+
+            // kenz code
+            outputText += keypadLetters[currentKey][letterIndex];
+
             //Debug.Log(finalizedText);
             //userInputField.text = finalizedText; // Update the input field - inpur manager's job
             currentKey = -1; // Reset current key
@@ -126,8 +137,12 @@ public class InputDummy : MonoBehaviour
     // Display the currently selected letter without finalizing it
     void DisplayCurrentLetter(char currentLetter)
     {
+        /* V's CODE 
         userInputField.text = prevLetters + currentLetter.ToString();
         outputText = userInputField.text;
+        */
+
+        userInputField.text = outputText + currentLetter.ToString();
 
         // Display the full finalized text + the current cycling letter
         //return finalizedText = currentLetter.ToString();
