@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        currentPhrase = phraseManager.List[Random.Range(0, phraseManager.List.Count + 1)];
+        currentPhrase = phraseManager.List[Random.Range(0, phraseManager.List.Count)];
 
         uiManager.DisplayPhrase(currentPhrase);
 
@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
 
     void EndGame()
     {

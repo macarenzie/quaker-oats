@@ -14,9 +14,6 @@ public class Phrase : MonoBehaviour
     #region FIELDS
     protected List<string> phraseList = new List<string>();
 
-    // testing purposes
-    [SerializeField] TMP_Text displayText;
-    private int phraseIndex;
     #endregion
 
     #region PROPERTIES
@@ -31,12 +28,6 @@ public class Phrase : MonoBehaviour
     void Start()
     {
         LoadFile();
-        phraseIndex = 0;
-
-        if (displayText != null)
-        {
-            displayText.text = phraseList[phraseIndex] + "\nList count = " + phraseList.Count;
-        }
     }
 
     // Update is called once per frame
