@@ -12,20 +12,17 @@ public class InputManager : MonoBehaviour
     // List of InputDummy scripts for each button (2, 3, 4, etc.)
     [SerializeField] List<InputDummy> inputDummies;
 
-    // This function will be called by each button's OnClick event
-    public void OnButtonClick(int buttonIndex)
+    public void OnOKPress()
     {
-        // Access the corresponding InputDummy script for the pressed button
-        InputDummy dummy = inputDummies[buttonIndex];
-        dummy.OnKeyPress(buttonIndex);
-
-        // Get the finalized text from the InputDummy
-        string newText = dummy.FinalizedText;
-
-        // Append the new text to the finalized string
-        finalizedString += newText;
-
-        // Update the user input field
-        userInputField.text = finalizedString;
+        for (int i = 0; i < inputDummies.Count; i++)
+        {
+            if (inputDummies[i].IsClicked)
+            {
+                userInputField.text = "";   //Empties it out to make sure that letters from all the buttons are added
+                finalizedString += inputDummies[i].LastFinalLetter; // Finalize the current letter
+                userInputField.text = finalizedString; // Update the user input field
+                inputDummies[i].IsClicked = false;
+            }
+        }
     }
 }

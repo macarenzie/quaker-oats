@@ -132,7 +132,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 108670084}
-  - component: {fileID: 108670085}
   m_Layer: 5
   m_Name: KeyPad
   m_TagString: Untagged
@@ -170,29 +169,6 @@ RectTransform:
   m_AnchoredPosition: {x: -1.6499863, y: -123.95}
   m_SizeDelta: {x: 165.16565, y: 181.32501}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &108670085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 108670083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99f254a232d146d47a4afbf9862c33a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  userInputField: {fileID: 766008815}
-  inputDummies:
-  - {fileID: 516058452}
-  - {fileID: 1169219384}
-  - {fileID: 1449373316}
-  - {fileID: 1391204222}
-  - {fileID: 555316170}
-  - {fileID: 344864959}
-  - {fileID: 253067348}
-  - {fileID: 307936125}
-  - {fileID: 119359736}
 --- !u!1 &119359728 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5140611347112791473, guid: 44feb0041d67eee4e92b821266f16846, type: 3}
@@ -228,6 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8173b3c3d75ae70409c1649c1761611a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInputField: {fileID: 766008815}
   typingDelay: 1.35
   currentKey: -1
 --- !u!1 &214860375
@@ -526,6 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8173b3c3d75ae70409c1649c1761611a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInputField: {fileID: 766008815}
   typingDelay: 1.35
   currentKey: -1
 --- !u!1001 &305612124
@@ -763,6 +741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8173b3c3d75ae70409c1649c1761611a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInputField: {fileID: 766008815}
   typingDelay: 1.35
   currentKey: -1
 --- !u!1 &344864951 stripped
@@ -800,6 +779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8173b3c3d75ae70409c1649c1761611a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInputField: {fileID: 766008815}
   typingDelay: 1.35
   currentKey: -1
 --- !u!1001 &368142261
@@ -1054,6 +1034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8173b3c3d75ae70409c1649c1761611a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInputField: {fileID: 766008815}
   typingDelay: 1.35
   currentKey: -1
 --- !u!1 &555316162 stripped
@@ -1091,6 +1072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8173b3c3d75ae70409c1649c1761611a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInputField: {fileID: 766008815}
   typingDelay: 1.35
   currentKey: -1
 --- !u!1001 &620441137
@@ -1685,6 +1667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8173b3c3d75ae70409c1649c1761611a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInputField: {fileID: 0}
   typingDelay: 1.35
   currentKey: -1
 --- !u!1 &1130700222
@@ -1699,6 +1682,7 @@ GameObject:
   - component: {fileID: 1130700226}
   - component: {fileID: 1130700225}
   - component: {fileID: 1130700224}
+  - component: {fileID: 1130700227}
   m_Layer: 5
   m_Name: Ok Button
   m_TagString: Untagged
@@ -1770,7 +1754,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1130700225}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1130700227}
+        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
+        m_MethodName: OnOKPress
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1130700225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1809,6 +1805,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1130700222}
   m_CullTransparentMesh: 1
+--- !u!114 &1130700227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130700222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99f254a232d146d47a4afbf9862c33a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  userInputField: {fileID: 766008815}
+  inputDummies:
+  - {fileID: 516058452}
+  - {fileID: 1169219384}
+  - {fileID: 1449373316}
+  - {fileID: 1391204222}
+  - {fileID: 555316170}
+  - {fileID: 344864959}
+  - {fileID: 253067348}
+  - {fileID: 307936125}
+  - {fileID: 119359736}
 --- !u!1 &1169219376 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5140611347112791473, guid: 44feb0041d67eee4e92b821266f16846, type: 3}
@@ -1844,6 +1863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8173b3c3d75ae70409c1649c1761611a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInputField: {fileID: 766008815}
   typingDelay: 1.35
   currentKey: -1
 --- !u!1001 &1271473117
@@ -2081,6 +2101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8173b3c3d75ae70409c1649c1761611a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInputField: {fileID: 766008815}
   typingDelay: 1.35
   currentKey: -1
 --- !u!1001 &1394754061
@@ -2688,6 +2709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8173b3c3d75ae70409c1649c1761611a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInputField: {fileID: 766008815}
   typingDelay: 1.35
   currentKey: -1
 --- !u!1001 &1492588148
