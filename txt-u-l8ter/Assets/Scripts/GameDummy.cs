@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 
 /// <summary>
@@ -13,6 +14,10 @@ public class GameDummy : MonoBehaviour
     private Phrase phraseManager;
     [SerializeField] UserInterface uiManager;
     [SerializeField] TextMeshPro timerDisplay;
+
+    // Add button references
+    [SerializeField] private Button startButton;
+    [SerializeField] private Button stopButton;
 
     private float accuracy;
     private int phrasesCompleted;
@@ -28,6 +33,9 @@ public class GameDummy : MonoBehaviour
     {
         Reset();
 
+        startButton.onClick.AddListener(StartGame);
+        stopButton.onClick.AddListener(EndGame);
+
         phraseManager = FindObjectOfType<Phrase>();
 
         if (phraseManager == null)
@@ -40,9 +48,8 @@ public class GameDummy : MonoBehaviour
 
         uiManager.DisplayPhrase(currentPhrase);
 
-        // if start button is clicked
-        gameActive = true;
-        timer = 60f;
+        // Disable timer until game is started
+        timerDisplay.text = timer.ToString("F2");
     }
 
     // Update is called once per frame
@@ -58,6 +65,17 @@ public class GameDummy : MonoBehaviour
                 EndGame();
             }
         }
+    }
+
+    void StartGame()
+    {
+        gameActive = true;
+        timer = 60f;
+
+        currentPhrase = phraseManager.List[Random.Range(0, phraseManager.List.Count)];
+        uiManager.DisplayPhrase(currentPhrase);
+
+        Debug.Log("Game Started");
     }
 
     void EndGame()
