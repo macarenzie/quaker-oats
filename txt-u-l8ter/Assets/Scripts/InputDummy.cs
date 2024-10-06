@@ -26,6 +26,9 @@ public class InputDummy : MonoBehaviour
     bool isClicked = false;
     bool isTyping = false;
 
+    // audio
+    [SerializeField] AudioSource buttonPressSFX;
+
     //Checks if the user is typing to switch user input being controlled by input manager instead
     public bool IsTyping
     {
@@ -70,6 +73,9 @@ public class InputDummy : MonoBehaviour
         if (keypadLetters.ContainsKey(key))
         {
             //Debug.Log(prevLetters);
+
+            // play sound effect
+            buttonPressSFX.Play();
 
             isClicked = true;
             float timeSinceLastPress = Time.time - lastKeyPressTime;
