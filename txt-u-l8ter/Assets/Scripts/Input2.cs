@@ -59,4 +59,6 @@ public class Input2 : MonoBehaviour
         // Add the current letter being cycled and the caret
         userInputField.text = finalText;
     }
+
+
 }
