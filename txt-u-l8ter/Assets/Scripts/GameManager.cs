@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -9,20 +10,23 @@ public class GameManager : MonoBehaviour
     public List<string> answers = new List<string>();
 
     [SerializeField] private TextMeshPro wordPrompt;
-    private TextMeshPro resultText;
+    private TextMeshPro accuracyScore;
 
     [SerializeField] private Timer timer;
     private Input userInput;
 
     private int wordIndex;
 
-    private bool gameOver = false;
+    private bool gameOver;
 
-
-    // Start is called before the first frame update
-    void Start()
+    //starts game
+    //connects to start call button 
+    private void StartGame()
     {
+        gameOver = false;
+        timer.IsRunning = true;
         wordIndex = 0;
+        wordPrompt.text = phrases.List[wordIndex];
     }
 
     // Update is called once per frame
@@ -30,25 +34,17 @@ public class GameManager : MonoBehaviour
     {
         while (!gameOver)
         {
+            if (timer.TimeRemaining == 0)
+            {
+                EndGame();
+            }
+
             //save the initial word displayed after button press
             PressOkay();
 
             //move on to the next phrase
             NextPhrase();
-
-            if (timer.TimeRemaining == 0)
-            {
-                EndGame();
-            }
         }
-    }
-
-    //starts game
-    //connects to start call button 
-    private void StartGame()
-    {
-        timer.IsRunning = true;
-        wordPrompt.text = phrases.List[wordIndex];
     }
 
     //ends gmae
@@ -69,22 +65,64 @@ public class GameManager : MonoBehaviour
         //updates the word index and displays the next word
         wordIndex++;
         wordPrompt.text = phrases.List[wordIndex];
+        Debug.Log("moved onto next phrase");
     }
 
+    //assign the calculated accuracy to the textmesh
     private void ShowResults()
     {
-
+        accuracyScore.text = CalculateAccuracy();
+        Debug.Log("accuracy score reported");
     }
 
     //calculates the accuracy 
-    private void CalculateAccuracy()
+    private string CalculateAccuracy()
     {
+        int accurateLetters = 0;
+        int accuracyScore = 0;
+        int totalChars = 0;
 
+        //calculate the total amount of chars in the answers array
+        foreach (string word in answers)
+        {
+            for (int i = 0; i < word.Length; i++)
+            {
+                totalChars++;
+            }
+        }    
+
+        //grab the answers in the answers list
+        foreach (string answer in answers)
+        {
+            //and int the phrases list
+            foreach (string word in phrases.List)
+            {
+                //itterate through each word's char for both arrays
+                for (int i = 0; i < answer.Length; i++)
+                {
+                    for (int j = 0; j < word.Length; j++)
+                    {
+                        //compare chars and add to the counter if correct
+                        if (answer[i] == word[i])
+                        {
+                            accurateLetters++;
+                        }
+                    }
+                }
+            }
+        }
+
+        //calculate percentage
+        accuracyScore = accurateLetters / totalChars;
+
+        //returnn string
+        return accuracyScore.ToString();
     }
 
     //attaching this to Okay button
     public void PressOkay()
     {
         answers[wordIndex] = userInput.Text;
+        Debug.Log("user input saved into answers!");
     }
 }

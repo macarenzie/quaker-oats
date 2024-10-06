@@ -12,7 +12,7 @@ using UnityEngine;
 public class Phrase : MonoBehaviour
 {
     #region FIELDS
-    protected List<string> phraseList;
+    protected List<string> phraseList = new List<string>();
 
     // testing purposes
     [SerializeField] TMP_Text displayText;
