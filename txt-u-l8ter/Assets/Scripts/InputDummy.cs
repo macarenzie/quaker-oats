@@ -8,6 +8,8 @@ using TMPro;
 
 public class InputDummy : MonoBehaviour
 {
+    //Not a good coding standard but needed a way to access the previous letters
+    [SerializeField] InputManager manager;
     [SerializeField] TMP_InputField userInputField; // Changed to TMP_InputField- don't need it as it complicates the code from manager class
     //having an input manager class to parse all the values from finalizedText property to the input field
 
@@ -19,7 +21,8 @@ public class InputDummy : MonoBehaviour
 
     // Stores the text before cycling letters (so we only overwrite the last letter), still important here for us to 
     //add consecutive letters
-    string finalizedText = "";
+    string outputText = "";
+    string prevLetters = "";
     bool isClicked = false;
     bool isTyping = false;
 
@@ -28,14 +31,14 @@ public class InputDummy : MonoBehaviour
     {
         get { return isTyping; }
     }
-    public string LastFinalLetter
+    public string LastLetter
     {
-        get { return finalizedText[finalizedText.Length -1].ToString(); }
+        get { return outputText[outputText.Length -1].ToString(); }
     }
     //Read only value for input manager to access it 
     public string FinalizedText
     {
-        get { return finalizedText; }
+        get { return outputText; }
     }
 
     //Checks was the function clicked
@@ -62,8 +65,12 @@ public class InputDummy : MonoBehaviour
     // Function to handle keypresses
     public void OnKeyPress(int key)
     {
+        //prevLetters = userInputField.text;
+        prevLetters = manager.FinalizedString;
         if (keypadLetters.ContainsKey(key))
         {
+            //Debug.Log(prevLetters);
+
             isClicked = true;
             float timeSinceLastPress = Time.time - lastKeyPressTime;
 
@@ -72,15 +79,16 @@ public class InputDummy : MonoBehaviour
             {
                 letterIndex = (letterIndex + 1) % keypadLetters[key].Count; // Cycle through letters
                 isTyping = true;
+
             }
             else
             {
                 // Finalize the previous letter if delay has not passed
                 if (currentKey != -1 && timeSinceLastPress < typingDelay && letterIndex != -1)
                 {
-                    finalizedText = keypadLetters[currentKey][letterIndex].ToString(); // Finalize the last letter
-                    Debug.Log(finalizedText);
-                    finalizedText = userInputField.text.ToString(); // Update the finalized input text
+                    outputText = keypadLetters[currentKey][letterIndex].ToString(); // Finalize the last letter
+                    //Debug.Log(finalizedText);
+                    outputText =  userInputField.text.ToString(); // Update the finalized input text
                     isTyping = false;
                 }
 
@@ -102,7 +110,7 @@ public class InputDummy : MonoBehaviour
         if (currentKey != -1 && Time.time - lastKeyPressTime >= typingDelay && letterIndex != -1)
         {
             // Finalize the letter and reset for the next keypress
-            finalizedText = keypadLetters[currentKey][letterIndex].ToString();
+            outputText = keypadLetters[currentKey][letterIndex].ToString();
             //Debug.Log(finalizedText);
             //userInputField.text = finalizedText; // Update the input field - inpur manager's job
             currentKey = -1; // Reset current key
@@ -112,8 +120,9 @@ public class InputDummy : MonoBehaviour
     // Display the currently selected letter without finalizing it
     void DisplayCurrentLetter(char currentLetter)
     {
-        userInputField.text = currentLetter.ToString();
-        finalizedText = userInputField.text;
+        userInputField.text = prevLetters + currentLetter.ToString();
+        outputText = userInputField.text;
+
         // Display the full finalized text + the current cycling letter
         //return finalizedText = currentLetter.ToString();
         //Debug.Log(finalizedText + currentLetter);
