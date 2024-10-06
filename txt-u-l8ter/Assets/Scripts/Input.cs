@@ -10,7 +10,7 @@ using TMPro;
 /// </summary>
 public class Input : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI userInput;
+    [SerializeField] TMP_InputField userInput;
     [SerializeField] float typingDelay = 1.35f; // Delay to finalize the letter
     Dictionary<int, List<char>> keypadLetters = new Dictionary<int, List<char>>();
     [SerializeField] int currentKey = -1;
