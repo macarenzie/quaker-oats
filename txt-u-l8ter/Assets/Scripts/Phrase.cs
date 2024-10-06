@@ -20,9 +20,9 @@ public class Phrase : MonoBehaviour
     #endregion
 
     #region PROPERTIES
-    protected int Count
+    public List<string> List
     {
-        get { return phraseList.Count; }
+        get { return phraseList; }
     }
 
     #endregion

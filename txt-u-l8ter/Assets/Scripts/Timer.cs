@@ -11,15 +11,26 @@ public class Timer : MonoBehaviour
     // timer logic
     [SerializeField] protected float initialTime;
     private float timeRemaining;
-    protected bool timerIsRunning;
+    private bool timerIsRunning;
 
     // ui
     [SerializeField] private Button startButton;
     [SerializeField] private Button resetButton;
 
 
-    [SerializeField] protected TMP_Text timerText;
+    [SerializeField] private TMP_Text timerText;
     #endregion
+
+    public bool IsRunning
+    {
+        get { return timerIsRunning; }
+        set { timerIsRunning = value; }
+    }
+
+    public float TimeRemaining
+    {
+        get { return timeRemaining; }
+    }
 
     void Start()
     {
@@ -27,13 +38,8 @@ public class Timer : MonoBehaviour
         timerIsRunning = false;
         timeRemaining = initialTime;
 
-        // hook up the buttons to their methods
-        startButton.onClick.AddListener(StartTimer);
-        resetButton.onClick.AddListener(ResetTimer);
-
         // print timer on screen
         DisplayTime(initialTime);
-        timerText.gameObject.SetActive(false); // timer hidden until started
     }
 
     void Update()
@@ -56,6 +62,14 @@ public class Timer : MonoBehaviour
                 timerIsRunning = false;
             }
         }
+        if (!timerIsRunning)
+        {
+            // reset the time
+            timeRemaining = initialTime;
+
+            // update display
+            DisplayTime(timeRemaining);
+        }
     }
 
     #region METHODS
@@ -67,24 +81,6 @@ public class Timer : MonoBehaviour
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
 
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-    }
-
-    void StartTimer()
-    {
-        timerIsRunning = true;
-        timerText.gameObject.SetActive(true);
-    }
-
-    void ResetTimer()
-    {
-        // stop the timer from running
-        timerIsRunning = false;
-
-        // reset the time
-        timeRemaining = initialTime;
-
-        // update display
-        DisplayTime(timeRemaining);
     }
     #endregion
 }
