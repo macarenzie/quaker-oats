@@ -18,7 +18,8 @@ public class AnotherInput : MonoBehaviour
     [SerializeField] int currentKey = -1;
     int letterIndex = -1;
     float lastKeyPressTime;
-
+    string finalizedString = null;
+    
     void Start()
     {
         // Initialize the keypad dictionary
@@ -44,15 +45,16 @@ public class AnotherInput : MonoBehaviour
             if (key == currentKey && timeSinceLastPress < typingDelay)
             {
                 letterIndex = (letterIndex + 1) % keypadLetters[key].Count; // Cycle through letters
+                //Debug.Log(keypadLetters[key][letterIndex]);
             }
-            else
+            /*else
             {
                 // Finalize the previous letter if delay has not passed
                 if (currentKey != -1 && timeSinceLastPress < typingDelay && letterIndex != -1)
                 {
                     AppendLetterToInput(keypadLetters[currentKey][letterIndex]);
-                }
-
+                }*/
+                
                 // Start typing the new letter
                 currentKey = key;
                 letterIndex = 0; // Reset to the first letter of the new key
@@ -84,9 +86,8 @@ public class AnotherInput : MonoBehaviour
         {
             userInputField.text = userInputField.text.Substring(0, userInputField.text.Length - 1);
         }
-
-        userInputField.text += currentLetter; // Display the current letter
-
+        //else - don't do it as resets to empty
+        userInputField.text += currentLetter;
         //Debug.Log(userInputField.text);
     }
 
@@ -94,5 +95,6 @@ public class AnotherInput : MonoBehaviour
     void AppendLetterToInput(char letter)
     {
         userInputField.text += letter; // Append the letter to the input field
+        Debug.Log(userInputField.text);
     }
 }
