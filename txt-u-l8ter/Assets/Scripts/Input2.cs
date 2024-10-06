@@ -35,7 +35,7 @@ public class Input2 : MonoBehaviour
         keypadLetters[9] = new List<char> { 'w', 'x', 'y', 'z' };
 
         // Start the blinking caret coroutine
-        caretBlinkCoroutine = StartCoroutine(BlinkCaret());
+        //caretBlinkCoroutine = StartCoroutine(BlinkCaret());
 
         // listener to OK button
         okButton.onClick.AddListener(okButtonClick);
@@ -77,7 +77,7 @@ public class Input2 : MonoBehaviour
             letterIndex = -1;
             currentLetter = "";
 
-            caretVisible = true;
+            //caretVisible = true;
         }
     }
 
@@ -94,7 +94,7 @@ public class Input2 : MonoBehaviour
     }
 
     // Coroutine to blink the caret at regular intervals
-    IEnumerator BlinkCaret()
+    /*IEnumerator BlinkCaret()
     {
         while (true)  // Infinite loop for caret blinking
         {
@@ -112,5 +112,5 @@ public class Input2 : MonoBehaviour
                 userInputField.text = finalText + (caretVisible ? "|" : "");
             }
         }
-    }
+    }*/
 }
