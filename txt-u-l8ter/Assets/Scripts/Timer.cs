@@ -9,7 +9,7 @@ public class Timer : MonoBehaviour
 {
     #region FIELDS
     // timer logic
-    [SerializeField] protected float initialTime;
+    private float initialTime;
     private float timeRemaining;
     private bool timerIsRunning;
 
