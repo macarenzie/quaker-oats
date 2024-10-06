@@ -17,6 +17,11 @@ public class Input : MonoBehaviour
     int letterIndex = -1;
     float lastKeyPressTime;
 
+    public string Text
+    {
+        get { return userInput.text; }
+    }
+
     // Start is called before the first frame update
     void Start()
     {

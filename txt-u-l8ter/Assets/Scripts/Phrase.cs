@@ -12,7 +12,7 @@ using UnityEngine;
 public class Phrase : MonoBehaviour
 {
     #region FIELDS
-    protected List<string> phraseList;
+    protected List<string> phraseList = new List<string>();
 
     // testing purposes
     [SerializeField] TMP_Text displayText;
@@ -20,9 +20,9 @@ public class Phrase : MonoBehaviour
     #endregion
 
     #region PROPERTIES
-    protected int Count
+    public List<string> List
     {
-        get { return phraseList.Count; }
+        get { return phraseList; }
     }
 
     #endregion
