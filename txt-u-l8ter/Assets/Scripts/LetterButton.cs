@@ -10,7 +10,7 @@ public class LetterButton : MonoBehaviour
 
     [SerializeField] private string[] letters;
     private int letterIndex = 0;
-    private float pressBuffer = 0.5f;
+    // private float pressBuffer = 0.5f;
 
     // ui
     [SerializeField] private TMP_Text displayText;
