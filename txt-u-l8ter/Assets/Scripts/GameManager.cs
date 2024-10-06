@@ -7,23 +7,28 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private Phrase phraseManager;
-    [SerializeField] UserInterface uiManager;
+    public List<string> answers = new List<string>();
+
+    [SerializeField] private TextMeshPro wordPrompt;
+    [SerializeField] private TextMeshPro accuracyScore;
+
     [SerializeField] TextMeshPro timerDisplay;
-
-    private float accuracy;
-    private int phrasesCompleted;
-    private string currentPhrase;
-    private int correctLetter;
-    private int totalLettersTyped;
     private float timer = 60f;
-    private bool gameActive = false;
-    private string playerInput = "";
+    private InputDummy userInput;
 
-    // Start is called before the first frame update
-    void Start()
+    private int wordIndex;
+    private int correctLetter;
+
+    private bool gameActive;
+
+    public int WordIndex
     {
-        Reset();
+        get { return wordIndex; }
+    }
 
+
+    private void Start()
+    {
         phraseManager = FindObjectOfType<Phrase>();
 
         if (phraseManager == null)
@@ -32,67 +37,109 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        currentPhrase = phraseManager.List[Random.Range(0, phraseManager.List.Count)];
-
-        uiManager.DisplayPhrase(currentPhrase);
-
-        // if start button is clicked
-        gameActive = true;
-        timer = 60f;
+        Reset();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gameActive)
+        while (gameActive)
         {
             timer -= Time.deltaTime;
             timerDisplay.text = timer.ToString("F2");
 
-            if (timer <= 0)
+            if (timer == 0)
             {
                 EndGame();
             }
+
+            NextPhrase();
         }
     }
 
+    //starts game
+    //connects to start call button 
+    public void StartGame()
+    {
+        wordIndex = 0;
+        correctLetter = 0;
+        answers.Clear();
+        gameActive = true;
+        wordPrompt.text = phraseManager.List[wordIndex];
+        Debug.Log("Game started");
+    }
 
-    void EndGame()
+    //ends gmae
+    //connects to end call button
+    private void EndGame()
     {
         gameActive = false;
-        accuracy = CalculateAccuracy();
-        uiManager.ShowResults(phrasesCompleted, accuracy);
+        Reset();
+        accuracyScore.text = CalculateAccuracy();
+        Debug.Log("Game started");
     }
 
-    void Reset()
+    public void Reset()
     {
-        phrasesCompleted = 0;
+        gameActive = false;
+        wordPrompt.text = "Press Start to begin!";
+        wordIndex = 0;
         correctLetter = 0;
-        totalLettersTyped = 0;
+        answers.Clear();
         timer = 60f;
-        playerInput = "";
-        uiManager.ResetUI();
     }
 
-    void HandleKeyPresses(string key)
+    private void NextPhrase()
     {
-        if (gameActive)
+        //save the initial word displayed after button press
+        PressOkay();
+
+        //updates the word index and displays the next word
+        wordIndex++;
+
+        if (wordIndex < phraseManager.List.Count)
         {
-            playerInput += key;
-            totalLettersTyped++;
+            wordPrompt.text = phraseManager.List[wordIndex];
         }
+        else
+        {
+            EndGame();
+        }
+
+        Debug.Log("moved onto next phrase");
     }
 
-    void SubmitInput()
+    //assign the calculated accuracy to the textmesh
+    private void ShowResults()
     {
-        if (gameActive)
-        {
-            TrackAccuracy(playerInput, currentPhrase);
-            currentPhrase = phraseManager.List[Random.Range(0, phraseManager.List.Count + 1)];
+        accuracyScore.text = CalculateAccuracy();
+        Debug.Log("accuracy score reported");
+    }
 
-            playerInput = "";
-            phrasesCompleted++;
+    //calculates the accuracy 
+    private string CalculateAccuracy()
+    {
+        int accurateLetters = 0;
+        int totalLetters = 0;
+
+        for (int i = 0; i < answers.Count && i < phraseManager.List.Count; i++)
+        {
+            string answer = answers[i];
+            string phrase = phraseManager.List[i];
+
+            totalLetters += Mathf.Max(answer.Length, phrase.Length);
+
+            for (int j = 0; j < Mathf.Min(answer.Length, phrase.Length); j++)
+            {
+                if (answer[j] == phrase[j])
+                {
+                    accurateLetters++;
+                }
+            }
         }
+
+        float accuracy = (float)accurateLetters / totalLetters * 100f;
+        return accuracy.ToString("F2") + "%";
     }
 
     void TrackAccuracy(string input, string currentPhrase)
@@ -107,15 +154,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    float CalculateAccuracy()
+    //attaching this to Okay button
+    public void PressOkay()
     {
-        if (totalLettersTyped == 0)
-        {
-            return 0;
-        }
-        else
-        {
-            return (correctLetter / totalLettersTyped) * 100f;
-        }
+        answers[wordIndex] = userInput.FinalizedText;
+        Debug.Log("user input saved into answers!");
+    }
+
+    public string GetCurrentPhrase()
+    {
+        return phraseManager.List[wordIndex];
+    }
+
+    public string GetAccuracyScore()
+    {
+        return CalculateAccuracy();
     }
 }
