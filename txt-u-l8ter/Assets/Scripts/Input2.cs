@@ -43,16 +43,17 @@ public class Input2 : MonoBehaviour
                 letterIndex = 0;
             }
             currentLetter = keypadLetters[currentKey][letterIndex].ToString();
-            DisplayCurrentLetterWithCaret();
+            DisplayCurrentLetter();
         }
     }
 
     // Display the currently selected letter with a blinking caret
-    void DisplayCurrentLetterWithCaret()
+    void DisplayCurrentLetter()
     {
         if (currentLetter != "")
         {
-            userInputField.text = finalText + currentLetter;
+            userInputField.text = finalText + currentLetter.ToString();
+            Debug.Log(finalText + " " + currentLetter);
         }
 
         // Add the current letter being cycled and the caret
