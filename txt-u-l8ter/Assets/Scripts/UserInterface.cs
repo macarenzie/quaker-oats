@@ -9,7 +9,7 @@ using TMPro;
 /// </summary>
 public class UserInterface : MonoBehaviour
 {
-    [SerializeField] TextMeshPro phraseDisplay;
+    //[SerializeField] TextMeshPro phraseDisplay;
     [SerializeField] TextMeshProUGUI resultDisplay;
     [SerializeField] GameObject keypad;
     // refer to game class
@@ -32,13 +32,13 @@ public class UserInterface : MonoBehaviour
        
         // DisplayPhrase(gameManager.GetCurrentPhrase());
 
-        ShowResults(4,12.0f);
-        DisplayPhrase("monkey");
+        // ShowResults(4,12.0f);
+        // DisplayPhrase("monkey");
     }
 
     public void DisplayPhrase(string phrase)
     {
-        phraseDisplay.text = phrase;
+        //phraseDisplay.text = phrase;
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class UserInterface : MonoBehaviour
     /// </summary>
     public void ResetUI()
     {
-        phraseDisplay.text = "";
+        //phraseDisplay.text = "";
         resultDisplay.text = "";
     }
 }
