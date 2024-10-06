@@ -17,17 +17,13 @@ public class UserInterface : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-         // Get the screen width and height
+        // Get the screen width and height
         int screenWidth = Screen.width;
         int screenHeight = Screen.height;
 
         // Display the screen size in the console
         Debug.Log("Screen Width: " + screenWidth);
         Debug.Log("Screen Height: " + screenHeight);
-
-        // Calculate the aspect ratio
-        float aspectRatio = (float)screenWidth / screenHeight;
-        Debug.Log("Aspect Ratio: " + aspectRatio);
     }
 
     // Update is called once per frame
@@ -37,6 +33,7 @@ public class UserInterface : MonoBehaviour
         DisplayPhrase("Chicken Wing");
         
         // if STOP is pressed, reset
+
     }
 
     public void DisplayPhrase(string phrase)

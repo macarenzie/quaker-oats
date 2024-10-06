@@ -2,24 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Input2 : MonoBehaviour
 {
     [SerializeField] TMP_InputField userInputField; // The TMP InputField where text will be displayed
-    [SerializeField] float typingDelay = 1.0f;      // Time delay to finalize the current letter
+    [SerializeField] Button okButton;
     [SerializeField] float caretBlinkInterval = 0.5f; // Interval for blinking caret
     Dictionary<int, List<char>> keypadLetters = new Dictionary<int, List<char>>();
 
     private int currentKey = -1;    // Current key pressed
     private int letterIndex = -1;   // Index of the letter being cycled through
-    private float lastKeyPressTime; // Time of the last key press
+    private bool isOk = false; // check if ok button was pressed
+
     private bool caretVisible = true;  // Control caret visibility
     private Coroutine caretBlinkCoroutine;
+
     private string finalText = "";  // Text that has been finalized
+    private string currentLetter;
 
     void Start()
     {
         // Initialize the keypad dictionary (retro flip-phone style)
+        keypadLetters[0] = new List<char> { ' ' };
         keypadLetters[2] = new List<char> { 'a', 'b', 'c' };
         keypadLetters[3] = new List<char> { 'd', 'e', 'f' };
         keypadLetters[4] = new List<char> { 'g', 'h', 'i' };
@@ -31,6 +36,15 @@ public class Input2 : MonoBehaviour
 
         // Start the blinking caret coroutine
         caretBlinkCoroutine = StartCoroutine(BlinkCaret());
+
+        // listener to OK button
+        okButton.onClick.AddListener(okButtonClick);
+    }
+
+    // Finalize the current letter after the typing delay
+    void Update()
+    {
+
     }
 
     // Function to handle keypresses (simulates pressing a number on a retro keypad)
@@ -38,71 +52,45 @@ public class Input2 : MonoBehaviour
     {
         if (keypadLetters.ContainsKey(key))
         {
-            float timeSinceLastPress = Time.time - lastKeyPressTime;
-
-            // If the same key is pressed again within the delay, cycle through letters
-            if (key == currentKey && timeSinceLastPress < typingDelay)
+            if (key == currentKey)
             {
-                letterIndex = (letterIndex + 1) % keypadLetters[key].Count; // Cycle through letters
+                letterIndex = (letterIndex + 1) % keypadLetters[key].Count;
             }
-            else
-            {
-                // Finalize the previous letter if delay has not passed
-                if (currentKey != -1 && timeSinceLastPress < typingDelay && letterIndex != -1)
-                {
-                    AppendLetterToInput(keypadLetters[currentKey][letterIndex]);
-                }
-
-                // Start typing the new letter
+            else{
                 currentKey = key;
-                letterIndex = 0; // Start with the first letter of the new key
+                letterIndex = 0;
             }
-
-            // Display the currently selected letter with the caret
-            DisplayCurrentLetterWithCaret(keypadLetters[currentKey][letterIndex]);
-
-            lastKeyPressTime = Time.time; // Update time of the last key press
+            currentLetter = keypadLetters[currentKey][letterIndex].ToString();
+            DisplayCurrentLetterWithCaret();
         }
-        Debug.Log("Key pressed: " + key);
-
+     
     }
 
-    // Finalize the current letter after the typing delay
-    void Update()
+    public void okButtonClick()
     {
-        if (currentKey != -1 && Time.time - lastKeyPressTime >= typingDelay && letterIndex != -1)
+        if (currentKey != -1 && letterIndex != -1)
         {
-            // Append the current letter and reset keypress tracking
-            AppendLetterToInput(keypadLetters[currentKey][letterIndex]);
-            currentKey = -1; // Reset key
+            finalText += currentLetter;
+            userInputField.text = finalText + "|";
+
+            currentKey = -1;
+            letterIndex = -1;
+            currentLetter = "";
+
+            caretVisible = true;
         }
     }
 
     // Display the currently selected letter with a blinking caret
-    void DisplayCurrentLetterWithCaret(char currentLetter)
+    void DisplayCurrentLetterWithCaret()
     {
-        // Remove the blinking caret if it's already visible
-        if (userInputField.text.EndsWith("|"))
-        {
-            userInputField.text = userInputField.text.Substring(0, userInputField.text.Length - 1);
-        }
-
-        // Add the current letter being cycled and the caret
-        if (finalText.Length > 0)
+        if (currentLetter != "")
         {
             userInputField.text = finalText + currentLetter + (caretVisible ? "|" : "");
         }
-        else
-        {
-            userInputField.text = currentLetter.ToString() + (caretVisible ? "|" : "");
-        }
-    }
 
-    // Append the finalized letter to the input field and move to the next letter
-    void AppendLetterToInput(char letter)
-    {
-        finalText += letter;  // Add the finalized letter to the stored text
-        userInputField.text = finalText + "|"; // Show the finalized text with a caret
+        // Add the current letter being cycled and the caret
+        userInputField.text = finalText + (caretVisible ? "|": "");
     }
 
     // Coroutine to blink the caret at regular intervals
@@ -116,7 +104,7 @@ public class Input2 : MonoBehaviour
             // Refresh the displayed text with the blinking caret
             if (currentKey != -1 && letterIndex != -1)
             {
-                DisplayCurrentLetterWithCaret(keypadLetters[currentKey][letterIndex]);
+                DisplayCurrentLetterWithCaret();
             }
             else
             {
