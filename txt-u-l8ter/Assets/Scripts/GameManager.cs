@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshPro timerDisplay;
     private float timer = 60f;
     private InputDummy userInput;
+    private InputManager inputManager;
 
     private int wordIndex;
     private int correctLetter;
@@ -34,6 +35,14 @@ public class GameManager : MonoBehaviour
         if (phraseManager == null)
         {
             Debug.LogError("Phrase Manager not found in the scene!");
+            return;
+        }
+
+        userInput = FindObjectOfType<InputDummy>();
+
+        if (userInput == null)
+        {
+            Debug.LogError("InputDummy component not found in the scene!");
             return;
         }
 
@@ -92,7 +101,7 @@ public class GameManager : MonoBehaviour
     private void NextPhrase()
     {
         //save the initial word displayed after button press
-        PressOkay();
+        inputManager.OnOKPress();
 
         //updates the word index and displays the next word
         wordIndex++;
@@ -142,24 +151,24 @@ public class GameManager : MonoBehaviour
         return accuracy.ToString("F2") + "%";
     }
 
-    void TrackAccuracy(string input, string currentPhrase)
-    {
-        int correctCount = Mathf.Min(input.Length, currentPhrase.Length);
-        for (int i = 0; i < correctCount; i++)
-        {
-            if (input[i] == currentPhrase[i])
-            {
-                correctLetter++;
-            }
-        }
-    }
+    //void TrackAccuracy(string input, string currentPhrase)
+    //{
+    //    int correctCount = Mathf.Min(input.Length, currentPhrase.Length);
+    //    for (int i = 0; i < correctCount; i++)
+    //    {
+    //        if (input[i] == currentPhrase[i])
+    //        {
+    //            correctLetter++;
+    //        }
+    //    }
+    //}
 
     //attaching this to Okay button
-    public void PressOkay()
-    {
-        answers[wordIndex] = userInput.FinalizedText;
-        Debug.Log("user input saved into answers!");
-    }
+    //public void PressOkay()
+    //{
+    //    answers[wordIndex] = userInput.FinalizedText;
+    //    Debug.Log("user input saved into answers!");
+    //}
 
     public string GetCurrentPhrase()
     {
