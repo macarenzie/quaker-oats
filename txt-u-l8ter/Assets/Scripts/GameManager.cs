@@ -6,16 +6,21 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Phrase phrases;
+    private Phrase phrases;
     public List<string> answers = new List<string>();
 
-    [SerializeField] private TextMeshPro wordPrompt;
+    private TextMeshPro wordPrompt;
     private TextMeshPro accuracyScore;
 
-    [SerializeField] private Timer timer;
+    private Timer timer;
     private Input userInput;
 
     private int wordIndex;
+
+    public int WordIndex
+    {
+        get { return wordIndex; }
+    }
 
     private bool gameOver;
 
@@ -47,7 +52,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //ends gmae
+    //ends game
     //connects to end call button
     private void EndGame()
     {
@@ -125,4 +130,15 @@ public class GameManager : MonoBehaviour
         answers[wordIndex] = userInput.Text;
         Debug.Log("user input saved into answers!");
     }
+
+    public string GetCurrentPhrase()
+    {
+        return phrases.List[wordIndex];
+    }
+
+    public string GetAccuracyScore()
+    {
+        return CalculateAccuracy();
+    }
+
 }

@@ -10,31 +10,30 @@ using TMPro;
 public class UserInterface : MonoBehaviour
 {
     [SerializeField] TextMeshPro phraseDisplay;
-    [SerializeField] TextMeshPro resultDisplay;
+    [SerializeField] TextMeshProUGUI resultDisplay;
     [SerializeField] GameObject keypad;
     // refer to game class
+    //[SerializeField] GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        // Get the screen width and height
-        int screenWidth = Screen.width;
-        int screenHeight = Screen.height;
-
-        // Display the screen size in the console
-        Debug.Log("Screen Width: " + screenWidth);
-        Debug.Log("Screen Height: " + screenHeight);
+        // if (gameManager == null)
+        // {
+        //     gameManager = FindObjectOfType<GameManager>(); 
+        // }
     }
 
     // Update is called once per frame
     void Update()
     {
-        ShowResults(12, 80.32f);
-        DisplayPhrase("Chicken Wing");
-        
-        // if STOP is pressed, reset
-        
+        // if STOP is pressed, reset and show results
+        // ShowResults(gameManager.WordIndex, float.Parse(gameManager.GetAccuracyScore()));
+       
+        // DisplayPhrase(gameManager.GetCurrentPhrase());
 
+        ShowResults(4,12.0f);
+        DisplayPhrase("monkey");
     }
 
     public void DisplayPhrase(string phrase)
